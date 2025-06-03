@@ -31,7 +31,22 @@ class MemberController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // dd($request->all());
+        try {
+            Member::create([
+                'wallet_address' => $request->wallet_address,
+                'full_name' => $request->full_name,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'membership_status' => 'active',
+                'joining_date' => $request->joining_date,
+                'gender' => $request->gender
+            ]);
+            return redirect()->route('members.index')->with('success', 'Member created successfully.');
+        } catch (\Throwable $th) {
+            dd($th);
+            return redirect()->route('members.index')->with('error', $th->getMessage());
+        }
     }
 
     /**
@@ -53,9 +68,16 @@ class MemberController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Member $member)
     {
-        //
+        try {
+            $member->update($request->all());
+            return redirect()->route('members.index')->with('success', 'Member updated successfully.');
+        } catch (\Throwable $th) {
+            dd($th);
+            return redirect()->route('members.index')->with('error', $th->getMessage());
+        }
+        
     }
 
     /**
@@ -64,5 +86,16 @@ class MemberController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function statusChange(Member $member)
+    {
+        try {
+            $member->update(['membership_status' => $member->membership_status == 'active' ? 'inactive' : 'active']);
+            return redirect()->route('members.index')->with('success', 'Member status updated successfully.');
+        } catch (\Throwable $th) {
+            dd($th);
+            return redirect()->route('members.index')->with('error', $th->getMessage());
+        }
     }
 }

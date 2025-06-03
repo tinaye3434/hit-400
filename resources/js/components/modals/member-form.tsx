@@ -19,7 +19,7 @@ export default function MemberFormModal({ isOpen, closeModal, member }: Props) {
         }
     }, [member]);
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
@@ -66,21 +66,10 @@ export default function MemberFormModal({ isOpen, closeModal, member }: Props) {
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+        <div className="fixed inset-0 flex items-center justify-center bg-opacity-50 z-50">
             <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-xl">
                 <h2 className="text-lg font-semibold mb-4">{member ? "Edit Member" : "Add Member"}</h2>
                 <form onSubmit={handleSubmit} encType="multipart/form-data">
-                    <div className="mb-3">
-                        <label className="block text-sm font-medium">Wallet Address</label>
-                        <input
-                            type="text"
-                            name="wallet_address"
-                            value={formData.wallet_address}
-                            onChange={handleChange}
-                            className="w-full border rounded p-2"
-                            required
-                        />
-                    </div>
                     <div className="mb-3">
                         <label className="block text-sm font-medium">Wallet Address</label>
                         <input
@@ -129,7 +118,7 @@ export default function MemberFormModal({ isOpen, closeModal, member }: Props) {
                         <label className="block text-sm font-medium">Joining Date</label>
                         <input
                             type="date"
-                            name="phone"
+                            name="joining_date"
                             value={formData.joining_date}
                             onChange={handleChange}
                             className="w-full border rounded p-2"
@@ -138,14 +127,16 @@ export default function MemberFormModal({ isOpen, closeModal, member }: Props) {
                     </div>
                     <div className="mb-3">
                         <label className="block text-sm font-medium">Gender</label>
-                        <input
-                            type="date"
-                            name="phone"
-                            value={formData.phone}
+                        <select 
+                        name="gender"
+                            value={formData.gender}
                             onChange={handleChange}
                             className="w-full border rounded p-2"
-                            required
-                        />
+                            required>
+                                <option value="">Select Gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
                     </div>
 
 

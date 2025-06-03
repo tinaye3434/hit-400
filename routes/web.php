@@ -21,6 +21,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 //    })->name('members');
 
     Route::resource('members', MemberController::class);
+    Route::post('member-status/{member}', [MemberController::class, 'statusChange'])->name('members.status');
 });
 
 require __DIR__.'/settings.php';
