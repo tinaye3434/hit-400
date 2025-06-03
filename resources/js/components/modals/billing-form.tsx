@@ -60,6 +60,17 @@ export default function BillingFormModal({ isOpen, closeModal, financialPeriods 
               ))}
             </select>
           </div>
+          <div className="mb-3">
+            <label className="block text-sm font-medium">Wallet Address</label>
+            <input
+              type="text"
+              name="wallet_address"
+              value={formData.amount}
+              onChange={handleChange}
+                            className="w-full border rounded p-2"
+                            required
+                        />
+                    </div>
 
           <div className="flex justify-end gap-2">
             <button

@@ -37,13 +37,14 @@ class BillingController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->all());
+        dd($request->all());
         $billing = Billing::create([
             'financial_period_id' => $request->financial_period_id,
         ]);
 
         $members = Member::where('status', 'active')->get();
           
+        $total_amount = 0;
         foreach ($members as $member) {
             $bill = Bill::create([
                 'billing_id' => $billing->id,
@@ -54,9 +55,17 @@ class BillingController extends Controller
             
             // Send email to the member
             if (!empty($member->email)) {
-                Mail::to($member->email)->send(new BillGeneratedMail($member, $bill));
+                Mail::to($member->email)->queue(new BillGeneratedMail($member, $bill));
             }
+
+            $total_amount += $request->amount;
         }
+
+        $billing->update([
+            'total_amount' => $total_amount,
+        ]);
+
+        return redirect()->route('billing.index');
     }
 
     /**

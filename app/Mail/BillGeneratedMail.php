@@ -2,52 +2,28 @@
 
 namespace App\Mail;
 
+use App\Models\Member;
+use App\Models\Bill;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
-use Illuminate\Mail\Mailables\Content;
-use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
 class BillGeneratedMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    /**
-     * Create a new message instance.
-     */
-    public function __construct()
+    public $member;
+    public $bill;
+
+    public function __construct(Member $member, Bill $bill)
     {
-        //
+        $this->member = $member;
+        $this->bill = $bill;
     }
 
-    /**
-     * Get the message envelope.
-     */
-    public function envelope(): Envelope
+    public function build()
     {
-        return new Envelope(
-            subject: 'Bill Generated Mail',
-        );
-    }
-
-    /**
-     * Get the message content definition.
-     */
-    public function content(): Content
-    {
-        return new Content(
-            view: 'view.name',
-        );
-    }
-
-    /**
-     * Get the attachments for the message.
-     *
-     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
-     */
-    public function attachments(): array
-    {
-        return [];
+        return $this->subject("Your Monthly Bill - {$this->bill->month}/{$this->bill->year}")
+                    ->view('emails.bill');
     }
 }
