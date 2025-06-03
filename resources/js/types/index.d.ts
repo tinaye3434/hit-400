@@ -57,3 +57,23 @@ export interface Member {
     updated_at: string;
     [key: string]: unknown; // This allows for additional properties...
 }
+
+export interface Billing {
+    id: number;
+    financial_period_id: number;
+    billed_amount: number;
+    paid_amount: number;
+    created_at: string;
+    updated_at: string;
+    [key: string]: unknown; // This allows for additional properties...
+    
+}
+
+export interface FinancialPeriod {
+    id: number;
+    start_date: string;
+    end_date: string;
+    created_at: string;
+    updated_at: string;
+    [key: string]: unknown; // This allows for additional properties...
+}

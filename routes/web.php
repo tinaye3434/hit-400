@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Billing;
+use App\Http\Controllers\BillingController;
 use App\Http\Controllers\MemberController;
 use App\Models\Member;
 use Illuminate\Support\Facades\Route;
@@ -22,6 +24,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::resource('members', MemberController::class);
     Route::post('member-status/{member}', [MemberController::class, 'statusChange'])->name('members.status');
+    Route::get('billing', [BillingController::class, 'index'])->name('billing.index');
+    Route::post('billing', [BillingController::class, 'store'])->name('billing.store');
 });
 
 require __DIR__.'/settings.php';

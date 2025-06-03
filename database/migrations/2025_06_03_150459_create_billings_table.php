@@ -11,13 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('bills', function (Blueprint $table) {
+        Schema::create('billings', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('billing_id');
-            $table->unsignedBigInteger('member_id');
             $table->unsignedBigInteger('financial_period_id');
-            $table->double('amount');
-            $table->enum('status', ['paid', 'unpaid'])->default('unpaid');
+            $table->double('billed_amount')->default(0);
+            $table->double('paid_amount')->default(0);
             $table->timestamps();
         });
     }
@@ -27,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('bills');
+        Schema::dropIfExists('billings');
     }
 };
