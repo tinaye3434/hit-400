@@ -57,13 +57,14 @@ export default function Index({ billings, financial_periods } : { billings: Bill
               billings.map((billing) => (
                 <tr key={billing.id} className="border-b">
                   <td className="p-3">
-                    {billing.full_name}
+                    {billing.financial_period?.name}
                   </td>
-                  <td className="p-3">{billing.email}</td>
-                  <td className="p-3">{billing.membership_status}</td>
+                  <td className="p-3">{billing.billed_amount}</td>
+                  <td className="p-3">{billing.paid_amount}</td>
+                  <td className="p-3">{billing.status}</td>
                   <td className="p-3 flex gap-2">
-                    <button onClick={() => openModal(billing)} className="bg-blue-500 text-sm text-white px-3 py-1 rounded">Edit</button>
-                    <button onClick={() => handleStatusChange(billing.id)} className={`text-sm text-white px-3 py-1 rounded ${billing.membership_status === "active" ? "bg-red-500" : "bg-green-500"}`}>{billing.membership_status == "active" ? "Deactivate" : "Activate"}</button>
+                    <button onClick={() => openModal(billing)} className="bg-red-500 text-sm text-white px-3 py-1 rounded">Reverse</button>
+                    <button onClick={() => handleStatusChange(billing.id)} className="bg-green-500 text-sm text-white px-3 py-1 rounded">View</button>
                   </td>
                 </tr>
               ))

@@ -12,9 +12,10 @@ interface Props {
 export default function BillingFormModal({ isOpen, closeModal, financialPeriods }: Props) {
   const [formData, setFormData] = useState({
     financial_period_id: "",
+    amount: "",
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
@@ -23,9 +24,15 @@ export default function BillingFormModal({ isOpen, closeModal, financialPeriods 
 
     const data = new FormData();
     data.append("financial_period_id", formData.financial_period_id);
+    data.append("amount", formData.amount);
 
     router.post("/billing", data, {
       onSuccess: () => {
+        setFormData({
+        financial_period_id: "",
+        amount: "",
+      });
+      
         closeModal();
         router.reload();
       },
@@ -61,10 +68,11 @@ export default function BillingFormModal({ isOpen, closeModal, financialPeriods 
             </select>
           </div>
           <div className="mb-3">
-            <label className="block text-sm font-medium">Wallet Address</label>
+            <label className="block text-sm font-medium">Amount</label>
             <input
-              type="text"
-              name="wallet_address"
+              type="number"
+              name="amount"
+              step="0.01"
               value={formData.amount}
               onChange={handleChange}
                             className="w-full border rounded p-2"

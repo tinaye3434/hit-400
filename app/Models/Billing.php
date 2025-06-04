@@ -12,7 +12,7 @@ class Billing extends Model
         return $this->hasMany(Bill::class);
     }
 
-    public function financialPeriod() {
+    public function financial_period() {
         return $this->belongsTo(FinancialPeriod::class);
     }
 }

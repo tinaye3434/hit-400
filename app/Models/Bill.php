@@ -16,7 +16,7 @@ class Bill extends Model
         return $this->belongsTo(Billing::class);
     }
 
-    public function financialPeriod() {
+    public function financial_period() {
         return $this->belongsTo(FinancialPeriod::class);
     }
 }

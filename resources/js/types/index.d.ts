@@ -66,7 +66,7 @@ export interface Billing {
     created_at: string;
     updated_at: string;
     [key: string]: unknown; // This allows for additional properties...
-    
+
 }
 
 export interface FinancialPeriod {
@@ -76,4 +76,16 @@ export interface FinancialPeriod {
     created_at: string;
     updated_at: string;
     [key: string]: unknown; // This allows for additional properties...
+}
+
+export interface Bill {
+    id: number;
+    billing_id: number;
+    member_id: number;
+    financial_period_id: number;
+    amount: number;
+    status: string;
+    created_at: string;
+    updated_at: string;
+    [key: string]: unknown;
 }

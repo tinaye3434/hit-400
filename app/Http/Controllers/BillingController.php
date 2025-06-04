@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Mail\BillGeneratedMail;
 use App\Models\FinancialPeriod;
 use Illuminate\Support\Facades\Mail;
+use PhpParser\Node\Stmt\TryCatch;
 
 class BillingController extends Controller
 {
@@ -19,7 +20,7 @@ class BillingController extends Controller
     public function index()
     {
         return Inertia::render('billing/index', [
-            'billings' => Billing::all(),
+            'billings' => Billing::with('financial_period')->get(),
             'financial_periods' => FinancialPeriod::all()
         ]);
     }
@@ -37,12 +38,13 @@ class BillingController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request->all());
-        $billing = Billing::create([
+        // dd($request->all());
+        Try{
+             $billing = Billing::create([
             'financial_period_id' => $request->financial_period_id,
         ]);
 
-        $members = Member::where('status', 'active')->get();
+        $members = Member::where('membership_status', 'active')->get();
           
         $total_amount = 0;
         foreach ($members as $member) {
@@ -55,15 +57,20 @@ class BillingController extends Controller
             
             // Send email to the member
             if (!empty($member->email)) {
-                Mail::to($member->email)->queue(new BillGeneratedMail($member, $bill));
+                Mail::to($member->email)->send(new BillGeneratedMail($member, $bill));
             }
 
             $total_amount += $request->amount;
         }
 
         $billing->update([
-            'total_amount' => $total_amount,
+            'billed_amount' => $total_amount,
         ]);
+        }
+        catch (\Throwable $th) {
+            dd($th);
+            return redirect()->route('billing.index')->with('error', $th->getMessage());
+        }
 
         return redirect()->route('billing.index');
     }
