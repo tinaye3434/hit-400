@@ -34,13 +34,12 @@ class MemberController extends Controller
         // dd($request->all());
         try {
             Member::create([
-                'wallet_address' => $request->wallet_address,
                 'full_name' => $request->full_name,
                 'email' => $request->email,
                 'phone' => $request->phone,
-                'membership_status' => 'active',
                 'joining_date' => $request->joining_date,
-                'gender' => $request->gender
+                'gender' => $request->gender,
+                'blockchain_id' => uniqid()
             ]);
             return redirect()->route('members.index')->with('success', 'Member created successfully.');
         } catch (\Throwable $th) {
@@ -91,7 +90,7 @@ class MemberController extends Controller
     public function statusChange(Member $member)
     {
         try {
-            $member->update(['membership_status' => $member->membership_status == 'active' ? 'inactive' : 'active']);
+            $member->update(['status' => $member->status == 'active' ? 'inactive' : 'active']);
             return redirect()->route('members.index')->with('success', 'Member status updated successfully.');
         } catch (\Throwable $th) {
             dd($th);

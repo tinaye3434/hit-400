@@ -9,13 +9,13 @@ interface Props {
 }
 
 export default function MemberFormModal({ isOpen, closeModal, member }: Props) {
-    const [formData, setFormData] = useState<Member>({ wallet_address: "", full_name: "", email: "", phone: "", joining_date: "", gender: "" });
+    const [formData, setFormData] = useState<Member>({ full_name: "", email: "", phone: "", joining_date: "", gender: "" });
 
     useEffect(() => {
         if (member) {
-            setFormData({ wallet_address: member.wallet_address, full_name: member.full_name, email: member.email, phone: member.phone, joining_date: member.joining_date, gender: member.gender || "" });
+            setFormData({ full_name: member.full_name, email: member.email, phone: member.phone, joining_date: member.joining_date, gender: member.gender || "" });
         } else {
-            setFormData({ wallet_address: "", full_name: "", email: "", phone: "", joining_date: "", gender: "" });
+            setFormData({ full_name: "", email: "", phone: "", joining_date: "", gender: "" });
         }
     }, [member]);
 
@@ -27,7 +27,6 @@ export default function MemberFormModal({ isOpen, closeModal, member }: Props) {
         e.preventDefault();
 
         const data = new FormData();
-        data.append("wallet_address", formData.wallet_address);
         data.append("full_name", formData.full_name);
         data.append("email", formData.email);
         data.append("phone", formData.phone);
@@ -52,6 +51,7 @@ export default function MemberFormModal({ isOpen, closeModal, member }: Props) {
             router.post("/members", data, {
                 onSuccess: () => {
 
+                    setFormData({ full_name: "", email: "", phone: "", joining_date: "", gender: "" });
                     closeModal();
                     router.reload();
                 },
@@ -70,17 +70,7 @@ export default function MemberFormModal({ isOpen, closeModal, member }: Props) {
             <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-xl">
                 <h2 className="text-lg font-semibold mb-4">{member ? "Edit Member" : "Add Member"}</h2>
                 <form onSubmit={handleSubmit} encType="multipart/form-data">
-                    <div className="mb-3">
-                        <label className="block text-sm font-medium">Wallet Address</label>
-                        <input
-                            type="text"
-                            name="wallet_address"
-                            value={formData.wallet_address}
-                            onChange={handleChange}
-                            className="w-full border rounded p-2"
-                            required
-                        />
-                    </div>
+                    
                     <div className="mb-3">
                         <label className="block text-sm font-medium">Full Name</label>
                         <input

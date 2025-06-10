@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('financial_period_id');
             $table->double('billed_amount')->default(0);
             $table->double('paid_amount')->default(0);
+            $table->enum('status', ['active', 'inactive'])->default('active');
             $table->timestamps();
         });
     }

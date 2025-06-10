@@ -4,7 +4,7 @@ import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { BookOpen, Folder, LayoutGrid, Users, AppWindow, DollarSign } from 'lucide-react';
+import { BookOpen, Folder, LayoutGrid, Users, AppWindow, DollarSign, Banknote, BookOpenText, House, ClipboardList } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
@@ -24,9 +24,29 @@ const mainNavItems: NavItem[] = [
         icon: AppWindow,
     },
     {
-        title: 'Billing',
+        title: 'Payments',
         href: '/payments',
         icon: DollarSign,
+    },
+    {
+        title: 'Withdrawals',
+        href: '/withdrawals',
+        icon: Banknote,
+    },
+    {
+        title: 'Ledger',
+        href: '/ledger',
+        icon: BookOpenText,
+    },
+    {
+        title: 'Stands',
+        href: '/stands',
+        icon: House,
+    },
+    {
+        title: 'Reports',
+        href: '/reports',
+        icon: ClipboardList,
     },
 ];
 

@@ -44,7 +44,7 @@ class BillingController extends Controller
             'financial_period_id' => $request->financial_period_id,
         ]);
 
-        $members = Member::where('membership_status', 'active')->get();
+        $members = Member::where('status', 'active')->get();
           
         $total_amount = 0;
         foreach ($members as $member) {

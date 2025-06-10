@@ -44,17 +44,12 @@ export interface User {
 
 export interface Member {
     id: number;
-    wallet_address: string;
     full_name: string;
     email: string;
     phone: string;
-    membership_status: string;
+    status: string;
     joining_date: string;
     gender: string;
-    user_id: number | null;
-    stand_id: number | null;
-    created_at: string;
-    updated_at: string;
     [key: string]: unknown; // This allows for additional properties...
 }
 
@@ -85,6 +80,23 @@ export interface Bill {
     financial_period_id: number;
     amount: number;
     status: string;
+    created_at: string;
+    updated_at: string;
+    [key: string]: unknown;
+}
+
+export interface PaymentMethod {
+    id: number;
+    name: number;
+    created_at: string;
+    updated_at: string;
+    [key: string]: unknown;
+}
+
+export interface Withdrawal {
+    id: number;
+    amount: number;
+    comment: string;
     created_at: string;
     updated_at: string;
     [key: string]: unknown;

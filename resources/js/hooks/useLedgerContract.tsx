@@ -3,28 +3,23 @@ import { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import LedgerABI from "@/abis/LedgerABI.json";
 import LedgerAddress from "@/abis/LedgerAddress.json";
+import { useWallet } from "./useWallet";
 
 export function useLedgerContract() {
+    const { signer } = useWallet(); // use signer from useWallet
     const [contract, setContract] = useState<ethers.Contract | null>(null);
 
     useEffect(() => {
-        const init = async () => {
-            if (!window.ethereum) return;
+        if (!signer) return;
 
-            const provider = new ethers.BrowserProvider(window.ethereum);
-            const signer = await provider.getSigner();
+        const contractInstance = new ethers.Contract(
+            LedgerAddress.address,
+            LedgerABI,
+            signer
+        );
 
-            const contract = new ethers.Contract(
-                LedgerAddress.address,
-                LedgerABI,
-                signer
-            );
-
-            setContract(contract);
-        };
-
-        init();
-    }, []);
+        setContract(contractInstance);
+    }, [signer]); // re-run if signer changes
 
     return contract;
 }

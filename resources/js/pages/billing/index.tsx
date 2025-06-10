@@ -63,7 +63,7 @@ export default function Index({ billings, financial_periods } : { billings: Bill
                   <td className="p-3">{billing.paid_amount}</td>
                   <td className="p-3">{billing.status}</td>
                   <td className="p-3 flex gap-2">
-                    <button onClick={() => openModal(billing)} className="bg-red-500 text-sm text-white px-3 py-1 rounded">Reverse</button>
+                    {/* <button onClick={() => openModal(billing)} className="bg-red-500 text-sm text-white px-3 py-1 rounded">Reverse</button> */}
                     <button onClick={() => handleStatusChange(billing.id)} className="bg-green-500 text-sm text-white px-3 py-1 rounded">View</button>
                   </td>
                 </tr>

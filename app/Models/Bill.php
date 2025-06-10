@@ -19,4 +19,14 @@ class Bill extends Model
     public function financial_period() {
         return $this->belongsTo(FinancialPeriod::class);
     }
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
+
+    public function balance()
+    {
+        return $this->billed_amount - $this->payments()->sum('amount_paid');
+    }
 }

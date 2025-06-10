@@ -13,15 +13,16 @@ return new class extends Migration
     {
         Schema::create('members', function (Blueprint $table) {
             $table->id();
-            $table->string('wallet_address');
             $table->string('full_name');
             $table->string('email');
             $table->string('phone');
-            $table->enum('membership_status', ['active', 'inactive', 'suspended']);
+            $table->enum('status', ['active', 'inactive', 'allocated'])->default('active');
             $table->date('joining_date');
             $table->enum('gender', ['male', 'female']);
+            $table->double('total_contribution')->default(0);
             $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('stand_id')->nullable();
+            $table->string('blockchain_id');
             $table->timestamps();
         });
     }

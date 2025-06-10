@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('member_id');
             $table->unsignedBigInteger('financial_period_id');
             $table->double('amount');
-            $table->enum('status', ['paid', 'unpaid'])->default('unpaid');
+            $table->enum('status', ['paid', 'pending'])->default('pending');
             $table->timestamps();
         });
     }

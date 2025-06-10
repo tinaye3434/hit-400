@@ -1,5 +1,5 @@
 import AppLayout from '@/layouts/app-layout';
-import { type BreadcrumbItem, Bill } from '@/types';
+import { type BreadcrumbItem, Bill, PaymentMethod } from '@/types';
 import { Head, router, usePage } from '@inertiajs/react';
 import { useState } from "react";
 import PaymentFormModal from '@/components/modals/payment-form';
@@ -14,7 +14,7 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: '/payments',
     },
 ];
-export default function Index({ bills } : { bills: Bill }) {
+export default function Index({ bills, payment_methods } : { bills: Bill, payment_methods:PaymentMethod }) {
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedBill, setSelectedBill] = useState(null);
@@ -42,7 +42,7 @@ export default function Index({ bills } : { bills: Bill }) {
                 <table className="w-full border-collapse bg-white text-black shadow-sm rounded-lg">
                     <thead>
                     <tr className="bg-gray-100 text-gray-800 border-b">
-                        {["Full Name", "Period", "Amount", "Status", "Actions"].map((header) => (
+                        {["Full Name", "Period", "Balance", "Status", "Actions"].map((header) => (
                             <th key={header} className="border p-3 text-left">{header}</th>
                         ))}
                     </tr>
@@ -55,7 +55,7 @@ export default function Index({ bills } : { bills: Bill }) {
                                     {bill.member?.full_name}
                                 </td>
                                 <td className="p-3">{bill.financial_period?.name}</td>
-                                <td className="p-3">{bill.amount}</td>
+                                <td className="p-3">{bill.balance}</td>
                                 <td className="p-3">{bill.status}</td>
                                 <td className="p-3 flex gap-2">
                                     <button onClick={() => openModal(bill)} className="bg-blue-500 text-sm text-white px-3 py-1 rounded">Pay</button>
@@ -68,7 +68,7 @@ export default function Index({ bills } : { bills: Bill }) {
                     </tbody>
                 </table>
             </div>
-            <PaymentFormModal isOpen={isModalOpen} closeModal={() => setIsModalOpen(false)} bill={selectedBill} />
+            <PaymentFormModal isOpen={isModalOpen} closeModal={() => setIsModalOpen(false)} bill={selectedBill} payment_methods={payment_methods} />
         </AppLayout>
     );
 

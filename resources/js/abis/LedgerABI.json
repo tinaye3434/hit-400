@@ -1,474 +1,398 @@
-"abi": [
-{
-"inputs": [],
-"stateMutability": "nonpayable",
-"type": "constructor"
-},
-{
-"inputs": [],
-"name": "AmountTooLarge",
-"type": "error"
-},
-{
-"inputs": [],
-"name": "IndexOutOfBounds",
-"type": "error"
-},
-{
-"inputs": [],
-"name": "InsufficientContribution",
-"type": "error"
-},
-{
-"inputs": [],
-"name": "InsufficientFunds",
-"type": "error"
-},
-{
-"inputs": [],
-"name": "MemberNotExists",
-"type": "error"
-},
-{
-"inputs": [],
-"name": "OnlyAdmin",
-"type": "error"
-},
-{
-"inputs": [],
-"name": "OnlyAuthorizedMember",
-"type": "error"
-},
-{
-"anonymous": false,
-"inputs": [
-{
-"indexed": true,
-"internalType": "bytes32",
-"name": "memberId",
-"type": "bytes32"
-},
-{
-"indexed": false,
-"internalType": "uint128",
-"name": "amount",
-"type": "uint128"
-},
-{
-"indexed": true,
-"internalType": "enum CooperativeLedger.TxType",
-"name": "txType",
-"type": "uint8"
-},
-{
-"indexed": false,
-"internalType": "uint32",
-"name": "timestamp",
-"type": "uint32"
-},
-{
-"indexed": false,
-"internalType": "bytes32",
-"name": "description",
-"type": "bytes32"
-}
-],
-"name": "EntryRecorded",
-"type": "event"
-},
-{
-"anonymous": false,
-"inputs": [
-{
-"indexed": true,
-"internalType": "bytes32",
-"name": "memberId",
-"type": "bytes32"
-}
-],
-"name": "MemberAuthorized",
-"type": "event"
-},
-{
-"anonymous": false,
-"inputs": [
-{
-"indexed": true,
-"internalType": "bytes32",
-"name": "memberId",
-"type": "bytes32"
-}
-],
-"name": "MemberRevoked",
-"type": "event"
-},
-{
-"inputs": [],
-"name": "admin",
-"outputs": [
-{
-"internalType": "address",
-"name": "",
-"type": "address"
-}
-],
-"stateMutability": "view",
-"type": "function"
-},
-{
-"inputs": [
-{
-"internalType": "bytes32",
-"name": "memberId",
-"type": "bytes32"
-}
-],
-"name": "authorizeMember",
-"outputs": [],
-"stateMutability": "nonpayable",
-"type": "function"
-},
-{
-"inputs": [
-{
-"internalType": "bytes32",
-"name": "",
-"type": "bytes32"
-}
-],
-"name": "authorizedMembers",
-"outputs": [
-{
-"internalType": "bool",
-"name": "",
-"type": "bool"
-}
-],
-"stateMutability": "view",
-"type": "function"
-},
-{
-"inputs": [
-{
-"internalType": "bytes32[]",
-"name": "memberIds",
-"type": "bytes32[]"
-},
-{
-"internalType": "uint128[]",
-"name": "amounts",
-"type": "uint128[]"
-},
-{
-"internalType": "bytes32[]",
-"name": "descriptions",
-"type": "bytes32[]"
-},
-{
-"internalType": "address payable[]",
-"name": "recipients",
-"type": "address[]"
-}
-],
-"name": "batchWithdraw",
-"outputs": [],
-"stateMutability": "nonpayable",
-"type": "function"
-},
-{
-"inputs": [
-{
-"internalType": "bytes32",
-"name": "memberId",
-"type": "bytes32"
-},
-{
-"internalType": "bytes32",
-"name": "description",
-"type": "bytes32"
-}
-],
-"name": "contribute",
-"outputs": [],
-"stateMutability": "payable",
-"type": "function"
-},
-{
-"inputs": [],
-"name": "emergencyWithdraw",
-"outputs": [],
-"stateMutability": "nonpayable",
-"type": "function"
-},
-{
-"inputs": [],
-"name": "getContractBalance",
-"outputs": [
-{
-"internalType": "uint256",
-"name": "",
-"type": "uint256"
-}
-],
-"stateMutability": "view",
-"type": "function"
-},
-{
-"inputs": [
-{
-"internalType": "uint256",
-"name": "start",
-"type": "uint256"
-},
-{
-"internalType": "uint256",
-"name": "count",
-"type": "uint256"
-}
-],
-"name": "getEntries",
-"outputs": [
-{
-"components": [
-{
-"internalType": "bytes32",
-"name": "memberId",
-"type": "bytes32"
-},
-{
-"internalType": "uint128",
-"name": "amount",
-"type": "uint128"
-},
-{
-"internalType": "enum CooperativeLedger.TxType",
-"name": "txType",
-"type": "uint8"
-},
-{
-"internalType": "uint32",
-"name": "timestamp",
-"type": "uint32"
-},
-{
-"internalType": "bytes32",
-"name": "description",
-"type": "bytes32"
-}
-],
-"internalType": "struct CooperativeLedger.LedgerEntry[]",
-"name": "",
-"type": "tuple[]"
-}
-],
-"stateMutability": "view",
-"type": "function"
-},
-{
-"inputs": [
-{
-"internalType": "uint256",
-"name": "index",
-"type": "uint256"
-}
-],
-"name": "getEntry",
-"outputs": [
-{
-"components": [
-{
-"internalType": "bytes32",
-"name": "memberId",
-"type": "bytes32"
-},
-{
-"internalType": "uint128",
-"name": "amount",
-"type": "uint128"
-},
-{
-"internalType": "enum CooperativeLedger.TxType",
-"name": "txType",
-"type": "uint8"
-},
-{
-"internalType": "uint32",
-"name": "timestamp",
-"type": "uint32"
-},
-{
-"internalType": "bytes32",
-"name": "description",
-"type": "bytes32"
-}
-],
-"internalType": "struct CooperativeLedger.LedgerEntry",
-"name": "",
-"type": "tuple"
-}
-],
-"stateMutability": "view",
-"type": "function"
-},
-{
-"inputs": [],
-"name": "getEntryCount",
-"outputs": [
-{
-"internalType": "uint256",
-"name": "",
-"type": "uint256"
-}
-],
-"stateMutability": "view",
-"type": "function"
-},
-{
-"inputs": [
-{
-"internalType": "bytes32",
-"name": "memberId",
-"type": "bytes32"
-}
-],
-"name": "getMemberStats",
-"outputs": [
-{
-"internalType": "uint128",
-"name": "totalContributions",
-"type": "uint128"
-},
-{
-"internalType": "uint128",
-"name": "totalWithdrawals",
-"type": "uint128"
-},
-{
-"internalType": "uint128",
-"name": "netBalance",
-"type": "uint128"
-},
-{
-"internalType": "bool",
-"name": "exists",
-"type": "bool"
-},
-{
-"internalType": "bool",
-"name": "authorized",
-"type": "bool"
-}
-],
-"stateMutability": "view",
-"type": "function"
-},
-{
-"inputs": [
-{
-"internalType": "uint256",
-"name": "",
-"type": "uint256"
-}
-],
-"name": "ledger",
-"outputs": [
-{
-"internalType": "bytes32",
-"name": "memberId",
-"type": "bytes32"
-},
-{
-"internalType": "uint128",
-"name": "amount",
-"type": "uint128"
-},
-{
-"internalType": "enum CooperativeLedger.TxType",
-"name": "txType",
-"type": "uint8"
-},
-{
-"internalType": "uint32",
-"name": "timestamp",
-"type": "uint32"
-},
-{
-"internalType": "bytes32",
-"name": "description",
-"type": "bytes32"
-}
-],
-"stateMutability": "view",
-"type": "function"
-},
-{
-"inputs": [
-{
-"internalType": "bytes32",
-"name": "",
-"type": "bytes32"
-}
-],
-"name": "members",
-"outputs": [
-{
-"internalType": "uint128",
-"name": "totalContributions",
-"type": "uint128"
-},
-{
-"internalType": "uint128",
-"name": "totalWithdrawals",
-"type": "uint128"
-},
-{
-"internalType": "bool",
-"name": "exists",
-"type": "bool"
-}
-],
-"stateMutability": "view",
-"type": "function"
-},
-{
-"inputs": [
-{
-"internalType": "bytes32",
-"name": "memberId",
-"type": "bytes32"
-}
-],
-"name": "revokeMember",
-"outputs": [],
-"stateMutability": "nonpayable",
-"type": "function"
-},
-{
-"inputs": [
-{
-"internalType": "bytes32",
-"name": "memberId",
-"type": "bytes32"
-},
-{
-"internalType": "uint128",
-"name": "amount",
-"type": "uint128"
-},
-{
-"internalType": "bytes32",
-"name": "description",
-"type": "bytes32"
-},
-{
-"internalType": "address payable",
-"name": "recipient",
-"type": "address"
-}
-],
-"name": "withdraw",
-"outputs": [],
-"stateMutability": "nonpayable",
-"type": "function"
-}
-],
+[
+    {
+        "inputs": [],
+        "stateMutability": "nonpayable",
+        "type": "constructor"
+    },
+    {
+        "inputs": [],
+        "name": "AmountTooLarge",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "IndexOutOfBounds",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "InsufficientContribution",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "InsufficientFunds",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "MemberNotExists",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "OnlyAdmin",
+        "type": "error"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "bytes32",
+                "name": "memberId",
+                "type": "bytes32"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint128",
+                "name": "amount",
+                "type": "uint128"
+            },
+            {
+                "indexed": true,
+                "internalType": "enum CooperativeLedger.TxType",
+                "name": "txType",
+                "type": "uint8"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint32",
+                "name": "timestamp",
+                "type": "uint32"
+            },
+            {
+                "indexed": false,
+                "internalType": "bytes32",
+                "name": "description",
+                "type": "bytes32"
+            }
+        ],
+        "name": "EntryRecorded",
+        "type": "event"
+    },
+    {
+        "inputs": [],
+        "name": "admin",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "bytes32[]",
+                "name": "memberIds",
+                "type": "bytes32[]"
+            },
+            {
+                "internalType": "uint128[]",
+                "name": "amounts",
+                "type": "uint128[]"
+            },
+            {
+                "internalType": "bytes32[]",
+                "name": "descriptions",
+                "type": "bytes32[]"
+            },
+            {
+                "internalType": "address payable[]",
+                "name": "recipients",
+                "type": "address[]"
+            }
+        ],
+        "name": "batchWithdraw",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "emergencyWithdraw",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "getContractBalance",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "start",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "count",
+                "type": "uint256"
+            }
+        ],
+        "name": "getEntries",
+        "outputs": [
+            {
+                "components": [
+                    {
+                        "internalType": "bytes32",
+                        "name": "memberId",
+                        "type": "bytes32"
+                    },
+                    {
+                        "internalType": "uint128",
+                        "name": "amount",
+                        "type": "uint128"
+                    },
+                    {
+                        "internalType": "enum CooperativeLedger.TxType",
+                        "name": "txType",
+                        "type": "uint8"
+                    },
+                    {
+                        "internalType": "uint32",
+                        "name": "timestamp",
+                        "type": "uint32"
+                    },
+                    {
+                        "internalType": "bytes32",
+                        "name": "description",
+                        "type": "bytes32"
+                    }
+                ],
+                "internalType": "struct CooperativeLedger.LedgerEntry[]",
+                "name": "",
+                "type": "tuple[]"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "index",
+                "type": "uint256"
+            }
+        ],
+        "name": "getEntry",
+        "outputs": [
+            {
+                "components": [
+                    {
+                        "internalType": "bytes32",
+                        "name": "memberId",
+                        "type": "bytes32"
+                    },
+                    {
+                        "internalType": "uint128",
+                        "name": "amount",
+                        "type": "uint128"
+                    },
+                    {
+                        "internalType": "enum CooperativeLedger.TxType",
+                        "name": "txType",
+                        "type": "uint8"
+                    },
+                    {
+                        "internalType": "uint32",
+                        "name": "timestamp",
+                        "type": "uint32"
+                    },
+                    {
+                        "internalType": "bytes32",
+                        "name": "description",
+                        "type": "bytes32"
+                    }
+                ],
+                "internalType": "struct CooperativeLedger.LedgerEntry",
+                "name": "",
+                "type": "tuple"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "getEntryCount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "bytes32",
+                "name": "memberId",
+                "type": "bytes32"
+            }
+        ],
+        "name": "getMemberStats",
+        "outputs": [
+            {
+                "internalType": "uint128",
+                "name": "totalContributions",
+                "type": "uint128"
+            },
+            {
+                "internalType": "uint128",
+                "name": "totalWithdrawals",
+                "type": "uint128"
+            },
+            {
+                "internalType": "uint128",
+                "name": "netBalance",
+                "type": "uint128"
+            },
+            {
+                "internalType": "bool",
+                "name": "exists",
+                "type": "bool"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "ledger",
+        "outputs": [
+            {
+                "internalType": "bytes32",
+                "name": "memberId",
+                "type": "bytes32"
+            },
+            {
+                "internalType": "uint128",
+                "name": "amount",
+                "type": "uint128"
+            },
+            {
+                "internalType": "enum CooperativeLedger.TxType",
+                "name": "txType",
+                "type": "uint8"
+            },
+            {
+                "internalType": "uint32",
+                "name": "timestamp",
+                "type": "uint32"
+            },
+            {
+                "internalType": "bytes32",
+                "name": "description",
+                "type": "bytes32"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "bytes32",
+                "name": "",
+                "type": "bytes32"
+            }
+        ],
+        "name": "members",
+        "outputs": [
+            {
+                "internalType": "uint128",
+                "name": "totalContributions",
+                "type": "uint128"
+            },
+            {
+                "internalType": "uint128",
+                "name": "totalWithdrawals",
+                "type": "uint128"
+            },
+            {
+                "internalType": "bool",
+                "name": "exists",
+                "type": "bool"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "bytes32",
+                "name": "memberId",
+                "type": "bytes32"
+            },
+            {
+                "internalType": "uint128",
+                "name": "amount",
+                "type": "uint128"
+            },
+            {
+                "internalType": "bytes32",
+                "name": "description",
+                "type": "bytes32"
+            }
+        ],
+        "name": "recordContribution",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "bytes32",
+                "name": "memberId",
+                "type": "bytes32"
+            },
+            {
+                "internalType": "uint128",
+                "name": "amount",
+                "type": "uint128"
+            },
+            {
+                "internalType": "bytes32",
+                "name": "description",
+                "type": "bytes32"
+            },
+            {
+                "internalType": "address payable",
+                "name": "recipient",
+                "type": "address"
+            }
+        ],
+        "name": "withdraw",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    }
+]

@@ -61,10 +61,10 @@ export default function Index({ members } : { members: Member }) {
                     {member.full_name}
                   </td>
                   <td className="p-3">{member.email}</td>
-                  <td className="p-3">{member.membership_status}</td>
+                  <td className="p-3">{member.status}</td>
                   <td className="p-3 flex gap-2">
                     <button onClick={() => openModal(member)} className="bg-blue-500 text-sm text-white px-3 py-1 rounded">Edit</button>
-                    <button onClick={() => handleStatusChange(member.id)} className={`text-sm text-white px-3 py-1 rounded ${member.membership_status === "active" ? "bg-red-500" : "bg-green-500"}`}>{member.membership_status == "active" ? "Deactivate" : "Activate"}</button>
+                    <button onClick={() => handleStatusChange(member.id)} className={`text-sm text-white px-3 py-1 rounded ${member.status === "active" ? "bg-red-500" : "bg-green-500"}`}>{member.status == "active" ? "Deactivate" : "Activate"}</button>
                   </td>
                 </tr>
               ))
