@@ -2,6 +2,7 @@ import { Breadcrumbs } from '@/components/breadcrumbs';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import { type BreadcrumbItem as BreadcrumbItemType } from '@/types';
 import ConnectWalletButton from '@/components/ConnectWalletButton';
+import WalletDropdown from './WalletDropdown';
 
 export function AppSidebarHeader({ breadcrumbs = [] }: { breadcrumbs?: BreadcrumbItemType[] }) {
     return (
@@ -13,7 +14,7 @@ export function AppSidebarHeader({ breadcrumbs = [] }: { breadcrumbs?: Breadcrum
             </div>
 
             {/* Right side: Connect button */}
-            <ConnectWalletButton />
+            <WalletDropdown />
         </header>
     );
 }

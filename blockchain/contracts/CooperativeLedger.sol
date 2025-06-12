@@ -11,7 +11,7 @@ contract CooperativeLedger {
         uint128 amount;
         TxType txType;
         uint32 timestamp;
-        bytes32 description;
+        string description; 
     }
 
     LedgerEntry[] public ledger;
@@ -29,12 +29,11 @@ contract CooperativeLedger {
         uint128 amount,
         TxType indexed txType,
         uint32 timestamp,
-        bytes32 description
+        string description
     );
 
     error OnlyAdmin();
     error InsufficientContribution();
-    error InsufficientFunds();
     error MemberNotExists();
     error IndexOutOfBounds();
     error AmountTooLarge();
@@ -51,9 +50,9 @@ contract CooperativeLedger {
     function recordContribution(
         bytes32 memberId,
         uint128 amount,
-        bytes32 description
+        string calldata description
     ) external {
-        if (amount == 0) revert InsufficientContribution();
+        // if (amount == 0) revert InsufficientContribution();
 
         uint32 timestamp = uint32(block.timestamp);
 
@@ -74,13 +73,11 @@ contract CooperativeLedger {
         emit EntryRecorded(memberId, amount, TxType.Contribution, timestamp, description);
     }
 
-    function withdraw(
+    function recordWithdrawal(
         bytes32 memberId,
         uint128 amount,
-        bytes32 description,
-        address payable recipient
-    ) external onlyAdmin {
-        if (address(this).balance < amount) revert InsufficientFunds();
+        string calldata description
+    ) external {
         if (!members[memberId].exists) revert MemberNotExists();
 
         uint32 timestamp = uint32(block.timestamp);
@@ -92,63 +89,8 @@ contract CooperativeLedger {
             amount: amount,
             txType: TxType.Withdrawal,
             timestamp: timestamp,
-            description: description
+            description: description 
         }));
-
-        recipient.transfer(amount);
-
-        emit EntryRecorded(memberId, amount, TxType.Withdrawal, timestamp, description);
-    }
-
-    function batchWithdraw(
-        bytes32[] calldata memberIds,
-        uint128[] calldata amounts,
-        bytes32[] calldata descriptions,
-        address payable[] calldata recipients
-    ) external onlyAdmin {
-        uint256 length = memberIds.length;
-        require(
-            length == amounts.length &&
-            length == descriptions.length &&
-            length == recipients.length,
-            "Array length mismatch"
-        );
-
-        uint256 totalAmount;
-        for (uint256 i = 0; i < length;) {
-            totalAmount += amounts[i];
-            unchecked { ++i; }
-        }
-
-        if (address(this).balance < totalAmount) revert InsufficientFunds();
-
-        for (uint256 i = 0; i < length;) {
-            _withdraw(memberIds[i], amounts[i], descriptions[i], recipients[i]);
-            unchecked { ++i; }
-        }
-    }
-
-    function _withdraw(
-        bytes32 memberId,
-        uint128 amount,
-        bytes32 description,
-        address payable recipient
-    ) private {
-        if (!members[memberId].exists) revert MemberNotExists();
-
-        uint32 timestamp = uint32(block.timestamp);
-
-        members[memberId].totalWithdrawals += amount;
-
-        ledger.push(LedgerEntry({
-            memberId: memberId,
-            amount: amount,
-            txType: TxType.Withdrawal,
-            timestamp: timestamp,
-            description: description
-        }));
-
-        recipient.transfer(amount);
 
         emit EntryRecorded(memberId, amount, TxType.Withdrawal, timestamp, description);
     }
@@ -192,13 +134,5 @@ contract CooperativeLedger {
         netBalance = totalContributions > totalWithdrawals ?
             totalContributions - totalWithdrawals : 0;
         exists = member.exists;
-    }
-
-    function getContractBalance() external view returns (uint256) {
-        return address(this).balance;
-    }
-
-    function emergencyWithdraw() external onlyAdmin {
-        payable(admin).transfer(address(this).balance);
     }
 }

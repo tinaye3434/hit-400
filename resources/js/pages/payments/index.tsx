@@ -1,6 +1,6 @@
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem, Bill, PaymentMethod } from '@/types';
-import { Head, router, usePage } from '@inertiajs/react';
+import { Head, router } from '@inertiajs/react';
 import { useState } from "react";
 import PaymentFormModal from '@/components/modals/payment-form';
 

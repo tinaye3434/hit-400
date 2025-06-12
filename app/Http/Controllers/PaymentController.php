@@ -20,7 +20,7 @@ class PaymentController extends Controller
 
     public function store(Bill $bill, Request $request)
     {
-        // dd($bill->billed_amount);
+        // dd($request);
 
         try{
             Payment::create([
@@ -29,11 +29,8 @@ class PaymentController extends Controller
                 'amount_paid' => $request->amount
             ]);
 
-            $total = $bill->member->total_contribution + $request->amount;
-
-            $bill->member->update([
-                'total_contribution' => $total,
-            ]);
+            
+            $bill->member->increment('total_contribution', $request->amount);
 
             if ($bill->payments->sum('amount_paid') >= $bill->amount)
             {
@@ -41,6 +38,8 @@ class PaymentController extends Controller
                     'status' => 'paid'
                 ]);
             }
+
+            $bill->billing->increment('paid_amount', $request->amount);
 
             return redirect()->route('payments.index')->with('success', 'Payment updated successfully.');
 

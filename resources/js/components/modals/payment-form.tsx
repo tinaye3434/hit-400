@@ -24,53 +24,58 @@ export default function PaymentFormModal({ isOpen, closeModal, bill, payment_met
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    // Create form data for the payment
-    const data = new FormData();
-    data.append('amount', formData.amount);
-    data.append('payment_method_id', formData.payment_method_id);
+        e.preventDefault();
 
-    try {
-        // First process the off-chain payment
-        const response = await router.post(`/payment/${bill.id}`, data);
-        
-        // Then optionally record on blockchain if ledger is available
-        if (ledger) {
-            try {
-                const encodedMemberId = ethers.encodeBytes32String(bill.member.blockchain_id);
-                const encodedDescription = ethers.encodeBytes32String(
-                    `${bill.financial_period.name}` // Include payment ID if available
-                );
-                
-                // Convert amount to uint128 (in smallest units, e.g., cents or wei)
-                // Example: For dollars, multiply by 100 to get cents
-                const amountInCents = Math.round(parseFloat(formData.amount) * 100);
-                const amountUint128 = BigInt(amountInCents);
+        // Create form data for the payment
+        const data = new FormData();
+        data.append('amount', formData.amount);
+        data.append('payment_method_id', formData.payment_method_id);
 
-                const tx = await ledger.recordContribution(
-                    encodedMemberId,
-                    amountUint128,
-                    encodedDescription
-                );
+        try {
+            // First process the off-chain payment
+            console.log(bill.id);
+            console.log(ledger);
 
-                await tx.wait();
-                console.log('✅ Payment recorded on blockchain');
-            } catch (blockchainError) {
-                console.error('Blockchain recording failed:', blockchainError);
-                // Continue even if blockchain recording fails
+            // Then optionally record on blockchain if ledger is available
+            if (ledger) {
+                try {
+                    const encodedMemberId = ethers.encodeBytes32String(bill.member.blockchain_id);
+                    const encodedDescription = ethers.encodeBytes32String(
+                        `${bill.financial_period.name}`, // Include payment ID if available
+                    );
+
+                    // Convert amount to uint128 (in smallest units, e.g., cents or wei)
+                    // Example: For dollars, multiply by 100 to get cents
+                    // const amountInCents = Math.round(parseFloat(formData.amount) * 100);
+                    // const amountUint128 = BigInt(amountInCents);
+
+                    const amountUint128 = BigInt(Math.floor(formData.amount));
+                    console.log('Submitting:', {
+                        memberId: encodedMemberId,
+                        amount: amountUint128.toString(),
+                        description: encodedDescription,
+                    });
+                    const tx = await ledger.recordContribution(encodedMemberId, amountUint128, encodedDescription);
+
+                    await tx.wait();
+                    const response = await router.post(`/payment/${bill.id}`, data);
+
+                    console.log('✅ Payment recorded on blockchain');
+                } catch (blockchainError) {
+                    console.error('Blockchain recording failed:', blockchainError);
+                    // Continue even if blockchain recording fails
+                }
             }
-        }
 
-        // Reset form and close modal
-        setFormData({ amount: '', payment_method_id: '' });
-        closeModal();
-        router.reload();
-    } catch (paymentError) {
-        console.error('Payment processing failed:', paymentError);
-        // Handle payment error (show to user, etc.)
-    }
-};
+            // Reset form and close modal
+            setFormData({ amount: '', payment_method_id: '' });
+            closeModal();
+            router.reload();
+        } catch (paymentError) {
+            console.error('Payment processing failed:', paymentError);
+            // Handle payment error (show to user, etc.)
+        }
+    };
 
     if (!isOpen) return null;
 

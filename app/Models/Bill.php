@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Bill extends Model
 {
     protected $guarded = ['id', 'created_at', 'updated_at'];
+    protected $appends = ['balance'];
 
     public function member() {
         return $this->belongsTo(Member::class);
@@ -25,8 +26,8 @@ class Bill extends Model
         return $this->hasMany(Payment::class);
     }
 
-    public function balance()
+    public function getBalanceAttribute()
     {
-        return $this->billed_amount - $this->payments()->sum('amount_paid');
+        return $this->amount - $this->payments()->sum('amount_paid');
     }
 }

@@ -50,6 +50,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     //Reports
     Route::get('reports', [ReportController::class, 'index'])->name('reports.index');
+    Route::post('reports/{type}', [ReportController::class, 'store']);
 
 
 });

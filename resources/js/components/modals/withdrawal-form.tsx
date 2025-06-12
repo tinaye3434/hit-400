@@ -1,5 +1,7 @@
 import { router } from '@inertiajs/react';
 import { useState } from 'react';
+import { ethers } from 'ethers';
+import { useLedgerContract } from '@/hooks/useLedgerContract';
 
 interface Props {
     isOpen: boolean;
@@ -12,6 +14,8 @@ export default function WithdrawalFormModal({ isOpen, closeModal }: Props) {
         comment: '',
     });
 
+    const ledger = useLedgerContract();
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
@@ -22,6 +26,42 @@ export default function WithdrawalFormModal({ isOpen, closeModal }: Props) {
         const data = new FormData();
         data.append('amount', formData.amount);
         data.append('comment', formData.comment);
+
+        try {
+            // First process the off-chain payment
+            console.log(bill.id);
+            console.log(ledger);
+
+            // Then optionally record on blockchain if ledger is available
+            if (ledger) {
+                try {
+                    const encodedMemberId = ethers.encodeBytes32String(bill.member.blockchain_id);
+                    const encodedDescription = ethers.encodeBytes32String(
+                        `${bill.financial_period.name}`, // Include payment ID if available
+                    );
+
+                    // Convert amount to uint128 (in smallest units, e.g., cents or wei)
+                    // Example: For dollars, multiply by 100 to get cents
+                    // const amountInCents = Math.round(parseFloat(formData.amount) * 100);
+                    // const amountUint128 = BigInt(amountInCents);
+
+                    const amountUint128 = BigInt(Math.floor(formData.amount));
+                    console.log('Submitting:', {
+                        memberId: encodedMemberId,
+                        amount: amountUint128.toString(),
+                        description: encodedDescription,
+                    });
+                    const tx = await ledger.recordContribution(encodedMemberId, amountUint128, encodedDescription);
+
+                    await tx.wait();
+                    const response = await router.post("/withdrawals/", data);
+
+                    console.log('✅ Withdrawal recorded on blockchain');
+                } catch (blockchainError) {
+                    console.error('Blockchain recording failed:', blockchainError);
+                    // Continue even if blockchain recording fails
+                }
+            }
 
         router.post("/withdrawals/", data, {
             onSuccess: () => {
