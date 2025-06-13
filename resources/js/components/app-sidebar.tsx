@@ -39,11 +39,6 @@ const mainNavItems: NavItem[] = [
         icon: BookOpenText,
     },
     {
-        title: 'Stands',
-        href: '/stands',
-        icon: House,
-    },
-    {
         title: 'Reports',
         href: '/reports',
         icon: ClipboardList,

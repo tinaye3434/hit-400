@@ -78,7 +78,7 @@ contract CooperativeLedger {
         uint128 amount,
         string calldata description
     ) external {
-        if (!members[memberId].exists) revert MemberNotExists();
+        // if (!members[memberId].exists) revert MemberNotExists();
 
         uint32 timestamp = uint32(block.timestamp);
 

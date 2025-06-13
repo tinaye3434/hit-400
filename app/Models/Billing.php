@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Billing extends Model
 {
     protected $guarded = ['id', 'created_at', 'updated_at'];
+    protected $appends = [''];
 
     public function bills() {
         return $this->hasMany(Bill::class);

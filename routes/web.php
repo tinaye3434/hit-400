@@ -1,20 +1,23 @@
 <?php
 
+use Inertia\Inertia;
+use App\Models\Member;
 use App\Http\Controllers\Billing;
-use App\Http\Controllers\BillingController;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\StandController;
+use App\Http\Controllers\LedgerController;
 use App\Http\Controllers\MemberController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\BillingController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\WithdrawalController;
-use App\Http\Controllers\LedgerController;
-use App\Http\Controllers\StandController;
-use App\Http\Controllers\ReportController;
-use App\Models\Member;
-use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
-Route::get('/', function () {
-    return Inertia::render('welcome');
-})->name('home');
+// Route::get('/', function () {
+//     return Inertia::render('welcome');
+// })->name('home');
+
+Route::get('/', [AuthenticatedSessionController::class, 'create'])->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
@@ -50,7 +53,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     //Reports
     Route::get('reports', [ReportController::class, 'index'])->name('reports.index');
-    Route::post('reports/{type}', [ReportController::class, 'store']);
+    Route::get('reports/{type}', [ReportController::class, 'store']);
 
 
 });

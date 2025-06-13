@@ -60,7 +60,7 @@ export function useLedgerEntries({
       amount: entry.amount.toString(),
       txType: entry.txType == 0 ? 'Contribution' : 'Withdrawal',
       timestamp: new Date(Number(entry.timestamp) * 1000),
-      description: ethers.decodeBytes32String(entry.description),
+      description: entry.txType == 'Contribution' ? ethers.decodeBytes32String(entry.description) : entry.description,
       transactionHash: event?.transactionHash,
       blockNumber: event?.blockNumber,
     };

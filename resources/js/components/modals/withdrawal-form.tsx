@@ -1,7 +1,7 @@
-import { router } from '@inertiajs/react';
-import { useState } from 'react';
-import { ethers } from 'ethers';
 import { useLedgerContract } from '@/hooks/useLedgerContract';
+import { router } from '@inertiajs/react';
+import { ethers } from 'ethers';
+import { useState } from 'react';
 
 interface Props {
     isOpen: boolean;
@@ -20,63 +20,52 @@ export default function WithdrawalFormModal({ isOpen, closeModal }: Props) {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         const data = new FormData();
         data.append('amount', formData.amount);
         data.append('comment', formData.comment);
 
-        try {
-            // First process the off-chain payment
-            console.log(bill.id);
-            console.log(ledger);
+        // Then optionally record on blockchain if ledger is available
+        if (ledger) {
+            try {
+                const encodedMemberId = ethers.encodeBytes32String('admin');
+                const description = formData.comment;
 
-            // Then optionally record on blockchain if ledger is available
-            if (ledger) {
-                try {
-                    const encodedMemberId = ethers.encodeBytes32String(bill.member.blockchain_id);
-                    const encodedDescription = ethers.encodeBytes32String(
-                        `${bill.financial_period.name}`, // Include payment ID if available
-                    );
-
-                    // Convert amount to uint128 (in smallest units, e.g., cents or wei)
-                    // Example: For dollars, multiply by 100 to get cents
-                    // const amountInCents = Math.round(parseFloat(formData.amount) * 100);
-                    // const amountUint128 = BigInt(amountInCents);
-
-                    const amountUint128 = BigInt(Math.floor(formData.amount));
-                    console.log('Submitting:', {
-                        memberId: encodedMemberId,
-                        amount: amountUint128.toString(),
-                        description: encodedDescription,
-                    });
-                    const tx = await ledger.recordContribution(encodedMemberId, amountUint128, encodedDescription);
-
-                    await tx.wait();
-                    const response = await router.post("/withdrawals/", data);
-
-                    console.log('✅ Withdrawal recorded on blockchain');
-                } catch (blockchainError) {
-                    console.error('Blockchain recording failed:', blockchainError);
-                    // Continue even if blockchain recording fails
-                }
-            }
-
-        router.post("/withdrawals/", data, {
-            onSuccess: () => {
-                setFormData({
-                    amount: '',
-                    comment: '',
+                const amountUint128 = BigInt(Math.floor(formData.amount));
+                console.log('Submitting:', {
+                    memberId: encodedMemberId,
+                    amount: amountUint128.toString(),
+                    description: description,
                 });
+                const tx = await ledger.recordWithdrawal(encodedMemberId, amountUint128, description);
 
-                closeModal();
-                router.reload();
-            },
-            onError: (errors) => {
-                console.error(errors.message || 'Failed to submit billing.');
-            },
-        });
+                await tx.wait();
+                
+                const response = await router.post('/withdrawals/', data);
+
+                console.log('✅ Withdrawal recorded on blockchain');
+            } catch (blockchainError) {
+                console.error('Blockchain recording failed:', blockchainError);
+                // Continue even if blockchain recording fails
+            }
+        }
+
+        // router.post("/withdrawals/", data, {
+        //     onSuccess: () => {
+        //         setFormData({
+        //             amount: '',
+        //             comment: '',
+        //         });
+
+        //         closeModal();
+        //         router.reload();
+        //     },
+        //     onError: (errors) => {
+        //         console.error(errors.message || 'Failed to submit billing.');
+        //     },
+        // });
     };
 
     if (!isOpen) return null;
@@ -87,7 +76,6 @@ export default function WithdrawalFormModal({ isOpen, closeModal }: Props) {
                 <h2 className="mb-4 text-lg font-semibold">Withdrawal</h2>
 
                 <form onSubmit={handleSubmit}>
-                    
                     <div className="mb-3">
                         <label className="block text-sm font-medium">Amount</label>
                         <input
@@ -111,7 +99,6 @@ export default function WithdrawalFormModal({ isOpen, closeModal }: Props) {
                             required
                         />
                     </div>
-                    
 
                     <div className="flex justify-end gap-2">
                         <button type="button" onClick={closeModal} className="rounded bg-gray-500 px-4 py-2 text-white">

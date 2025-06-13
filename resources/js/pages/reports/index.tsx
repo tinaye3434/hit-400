@@ -18,7 +18,7 @@ export default function Index() {
 
     const generateReport = (type: string) => {
         setLoading(true);
-        router.post(`/reports/${type}`, {
+        router.get(`/reports/${type}`, {
             onSuccess: () => {
                 router.reload();
                 setLoading(false);
